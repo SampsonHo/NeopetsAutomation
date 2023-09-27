@@ -11,7 +11,7 @@ pyautogui.click(x, y)
 
 i = 0
 try:
-    while keyboard.is_pressed('esc') == False:
+    while keyboard.is_pressed('esc') == False and i < 550:
 
         # Press F5 to refresh
         pyautogui.press('f5')
