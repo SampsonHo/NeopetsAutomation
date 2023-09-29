@@ -2,44 +2,22 @@ import webbrowser
 import schedule
 import time
 import pyautogui as pag
+import keyboard
+import random
 import datetime
 
-# URL of the webpage to open
+# Constants
 webpage_url = 'https://www.neopets.com/faerieland/springs.phtml'
-
-# Path to the image file to locate
 image_path_heal_my_pets = r'HealMyPets.jpg'
 image_path_healing_potion = r'HealingPotionXX.jpg'
-
-# Confidence level for image matching
 IMAGE_CONFIDENCE = 0.85
 
-def locate_and_right_click_image(image_path):
+def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
     try:
-        pag.press('end')
-        i=0
-        while locate_image_on_screen(image_path) is None and i < 3:
-            pag.hotkey('ctrl', 'w')
-            print("Reopening webpage...")
-            webbrowser.open(webpage_url)
-            time.sleep(8)
-            pag.press('end')
-            i += 1
-        
-        location = pag.locateOnScreen(image_path, confidence=IMAGE_CONFIDENCE)
-        if location:
-            center_x, center_y = pag.center(location)
-            pag.moveTo(center_x, center_y)
-            pag.rightClick()
-            time.sleep(1)
-            open_image_in_new_tab()
-            time.sleep(2)
-            print('Purchase made: ', datetime.datetime.now().strftime("%H:%M:%S"))
-        else:
-            print(f"Image {image_path} not found on screen")
-            return None
+        return pag.locateOnScreen(image_path, confidence=confidence)
     except Exception as e:
-        print(f"Error locating and right-clicking image: {e}")
+        print(f"Error locating image: {e}")
+        return None
 
 def open_image_in_new_tab():
     # Navigate to 'Open link in new tab' option and press 'Enter'
@@ -47,64 +25,59 @@ def open_image_in_new_tab():
     pag.press('enter')
     pag.hotkey('ctrl', 'tab')
     pag.hotkey('ctrl', 'w')
-    
 
-def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
-    """
-    Locate the given image on the screen and return its location.
+def click_image(location, right_click=False):
+    center_x, center_y = pag.center(location)
+    pag.moveTo(center_x, center_y)
+    if right_click:
+        pag.rightClick()
+        time.sleep(.5)
+        open_image_in_new_tab()
+        print('Potion Purchase made: ', datetime.datetime.now().strftime("%H:%M:%S"))
+    else:
+        pag.click()
+        time.sleep(.5)
+        pag.hotkey('ctrl', 'w')
 
-    :param image_path: Path to the image file to locate.
-    :param confidence: Confidence level for image matching.
-    :return: Location of the image if found, None otherwise.
-    """
+
+def locate_and_click_image(image_path, right_click=False):
     try:
-        return pag.locateOnScreen(image_path, confidence=confidence)
-    except Exception as e:
-        print(f"Error locating image: {e}")
-        return None
-
-
-def locate_and_click_image(image_path):
-    """
-    Locate the given image on the screen and click it.
-
-    :param image_path: Path to the image file to locate.
-    """
-    try:
-        # Locate the image on the screen
-        location = pag.locateOnScreen(image_path, confidence=IMAGE_CONFIDENCE)
+        pag.press('end')
+        location = None
+        attempts = 0
+        while location is None and attempts < 3:
+            if attempts > 0:
+                pag.hotkey('ctrl', 'w')
+                print(f"Reopening webpage... attempt {attempts}")
+                webbrowser.open(webpage_url)
+                time.sleep(7)
+                pag.press('end')
+            location = locate_image_on_screen(image_path)
+            attempts += 1
+        
         if location:
-            # Move the cursor to the center of the located image
-            center_x, center_y = pag.center(location)
-            pag.moveTo(center_x, center_y)
-            
-            # Perform a left click
-            pag.click()
-            time.sleep(5)
-            pag.hotkey('ctrl', 'w')
-
+            click_image(location, right_click)
         else:
             print(f"Image {image_path} not found on screen")
+            pag.hotkey('ctrl', 'w')
     except Exception as e:
         print(f"Error locating and clicking image: {e}")
-
     
 
 
 def task():
     webbrowser.open(webpage_url)
-    time.sleep(8)
-    pag.press('end')
-    locate_and_right_click_image(image_path_healing_potion)
+    time.sleep(random.uniform(7,9))
+    locate_and_click_image(image_path_healing_potion, right_click=True)
     locate_and_click_image(image_path_heal_my_pets)
+
 
 # Run the task for the first time immediately
 task()
-
-# Schedule the task every 30 minutes
 schedule.every(30).minutes.do(task)
 
-# Keep the script running
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+if __name__ == "__main__":
+    # Keep the script running
+    while not keyboard.is_pressed('esc'):
+        schedule.run_pending()
+        time.sleep(1)

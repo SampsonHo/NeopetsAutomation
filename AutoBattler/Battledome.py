@@ -10,8 +10,6 @@ def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
     """
     Locate the given image on the screen and return its location.
 
-    :param image_path: Path to the image file to locate.
-    :param confidence: Confidence level for image matching.
     :return: Location of the image if found, None otherwise.
     """
     try:
@@ -21,15 +19,9 @@ def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
         return None
 
 def move_cursor_to_center_of_location(location):
-    """
-    Move the cursor to the center of the given location.
-
-    :param location: The location (Box) where to move the cursor to the center.
-    """
     if location:
         center_x, center_y = pag.center(location)
         pag.moveTo(center_x, center_y)
-        #time.sleep(1)  # Sleep for 1 second for visual confirmation
 
 def main(found_image_locations, is_last_round):
     # List of image paths
@@ -49,7 +41,6 @@ def main(found_image_locations, is_last_round):
         # Add more image paths as needed
     ]
     
-
     
     for image_path in image_paths:
         print(f"Looking for image: {image_path}")
@@ -60,18 +51,20 @@ def main(found_image_locations, is_last_round):
             print("Final round: Skipping 'play again' click.")
             continue
         
+        i=0
         if image_path == r"9FastForward.jpg":
-            while locate_image_on_screen(image_path) is None:
+            while locate_image_on_screen(image_path) is None and i<15:
                 print("Waiting for combat...")
                 time.sleep(.1)  # Sleep for .5 second and try again
+                i += 1
         i=0
         if image_path == r"3weapon.jpg":
             while locate_image_on_screen(r"9FastForward.jpg") is None and i < 15:
                 print("Waiting for monologue...")
                 time.sleep(.1)  # Sleep for .1 second and try again
                 i += 1
-        else:
-            time.sleep(.01)
+        
+        time.sleep(.01)
 
         if image_path not in found_image_locations:
             # If the image location is not already stored, locate the image on the screen
