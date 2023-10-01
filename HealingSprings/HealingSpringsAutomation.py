@@ -43,15 +43,17 @@ def click_image(location, right_click=False):
 def locate_and_click_image(image_path, right_click=False):
     try:
         pag.press('end')
-        location = None
+        time.sleep(1)
+        location = locate_image_on_screen(image_path)
         attempts = 0
         while location is None and attempts < 3:
             if attempts > 0:
                 pag.hotkey('ctrl', 'w')
                 print(f"Reopening webpage... attempt {attempts}")
                 webbrowser.open(webpage_url)
-                time.sleep(7)
+                time.sleep(3)
                 pag.press('end')
+                time.sleep(3)
             location = locate_image_on_screen(image_path)
             attempts += 1
         

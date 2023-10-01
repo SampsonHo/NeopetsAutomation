@@ -11,7 +11,7 @@ pyautogui.click(x, y)
 
 i = 0
 try:
-    while keyboard.is_pressed('esc') == False and i < 100:
+    while keyboard.is_pressed('esc') == False and i < 650:
 
         # Press F5 to refresh
         pyautogui.press('f5')
@@ -27,9 +27,9 @@ try:
 
         #Pause on the 20th run to ensure page load
         if i%25 == 0:
-            time.sleep(2.5) 
+            time.sleep(2.5)
+            print ('run:',i) 
         i += 1
-        print ('run:',i)
 except KeyboardInterrupt:
 
     print("Program terminated by user")
