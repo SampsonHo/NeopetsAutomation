@@ -1,3 +1,8 @@
+'''Future Updates:
+-Add checks for page refresh fail, navigate back then forward to fix
+-Create different battle tactics and allow the user to chose which one to use
+'''
+
 import pyautogui as pag
 import time
 import keyboard
@@ -5,6 +10,7 @@ import random
 
 # Constants
 IMAGE_CONFIDENCE = 0.85
+
 
 def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
     """
@@ -53,14 +59,14 @@ def main(found_image_locations, is_last_round):
         
         i=0
         if image_path == r"9FastForward.jpg":
-            while locate_image_on_screen(image_path) is None and i<15:
-                print("Waiting for combat...")
+            while locate_image_on_screen(image_path) is None and i<20:
+                #print("Waiting for combat...")
                 time.sleep(.1)  # Sleep for .5 second and try again
                 i += 1
         i=0
         if image_path == r"3weapon.jpg":
             while locate_image_on_screen(r"9FastForward.jpg") is None and i < 15:
-                print("Waiting for monologue...")
+                #print("Waiting for monologue...")
                 time.sleep(.1)  # Sleep for .1 second and try again
                 i += 1
         
@@ -96,7 +102,7 @@ if __name__ == "__main__":
     found_image_locations = {}
 
     #Total Number of Rounds
-    total_rounds = 50
+    total_rounds = int(input("Enter the number of rounds for this run: "))
 
     for i in range(total_rounds):
         # Check if the current round is the last one
@@ -112,7 +118,10 @@ if __name__ == "__main__":
         # Check for the availability of the image
         fight_image_path = r"2fight.jpg"
         i=0
-        while locate_image_on_screen(fight_image_path) is None and i < 15:
+        while locate_image_on_screen(fight_image_path) is None and i < 20:
+            if i==19:
+                print('Failed to battle, ending process')
+                break
             print("Waiting for the next round...")
             time.sleep(.3)  # Sleep for .3 second and try again
             i += 1
