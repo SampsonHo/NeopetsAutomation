@@ -28,7 +28,7 @@ try:
 
         #Pause on the 20th run to ensure page load
         if i%25 == 0:
-            time.sleep(random.uniform(3,7))
+            time.sleep(random.uniform(2,4))
             print ('run:',i) 
         i += 1
 
@@ -42,7 +42,7 @@ try:
         pyautogui.press('enter')
         
         # Wait for a specified random time before the next refresh
-        time.sleep(random.uniform(0.5, 1.5))  # Random sleep time between 1.1 and 2.3 seconds
+        time.sleep(random.uniform(0.3, 1.3))  # Random sleep time between 1.1 and 2.3 seconds
 
 
 except KeyboardInterrupt:

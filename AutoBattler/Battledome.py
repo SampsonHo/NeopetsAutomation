@@ -9,7 +9,7 @@ import keyboard
 import random
 
 # Constants
-IMAGE_CONFIDENCE = 0.85
+IMAGE_CONFIDENCE = 0.80
 
 
 def locate_image_on_screen(image_path, confidence=IMAGE_CONFIDENCE):
@@ -36,10 +36,13 @@ def main(found_image_locations, is_last_round):
         r"3weapon.jpg",
         r"4Machete.jpg",
         r"5weapon2.jpg",
-        r"6Heal.jpg",
+        #r"6Heal.jpg",
+        #r"6_1HoneyPot.jpg",
+        r"6_2Bomb.jpg",
         r"7Ability.jpg",
         #r"8Medidate.jpg",
-        r"8Icicle.jpg",
+        #r"8Icicle.jpg",
+        r"8_1LensFlare.jpg",
         r"2fight.jpg",
         r"9FastForward.jpg",
         r"10Collect.jpg",
